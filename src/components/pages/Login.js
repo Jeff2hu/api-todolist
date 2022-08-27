@@ -1,15 +1,35 @@
-import React from 'react'
+import React,{ useState,useEffect, useContext } from 'react'
 import { Link,useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
+import { api_login } from '../store/login/API_Login';
+import { LoginContext } from '../store/login/LoginContext';
+
 const Login = () => {
+
+  const { setToken,message,setMessage } = useContext(LoginContext)
   
   const navigate = useNavigate();
-  const { register, handleSubmit, watch, formState:{ errors } } = useForm();
-  const onSubmit = ({email,password}) => {
-    console.log(email,password)
-    navigate("/todolist")
+  const { register, handleSubmit, formState:{ errors } } = useForm();
+  const onSubmit = async(data) => {
+    const login = await api_login(data)
+    const res = await login.json();
+    if(login.status===200){
+      setMessage(res.message)
+      localStorage.setItem("token",login.headers.get("authorization"))
+      localStorage.setItem("name",res.nickname)
+      setToken(localStorage.getItem("token"))
+      navigate("/todolist")
+    }else{
+      setMessage(res.error)
+    }
   }
+
+  useEffect(()=>{
+    setTimeout(()=>{
+      setMessage("")
+    },2000)
+  },[message])
 
   return (
     <div id="loginPage" className="bg-yellow">
@@ -25,7 +45,7 @@ const Login = () => {
               <p className='noValue'>{errors.email?.message}</p>
               </label>
               <input 
-                className="formControls_input"
+                className={`formControls_input ${errors.email?"falseInput":""}`}
                 type="text" 
                 id="email" 
                 placeholder="請輸入信箱"
@@ -44,7 +64,7 @@ const Login = () => {
               <p className='noValue'>{errors.password?.message}</p>
               </label>
               <input 
-                className="formControls_input"
+                className={`formControls_input ${errors.password?"falseInput":""}`}
                 type="password" 
                 id="password" 
                 placeholder="請輸入密碼"
@@ -66,6 +86,7 @@ const Login = () => {
               />
               <Link className="formControls_btnLink" to="/signup">註冊帳號</Link>
           </form>
+          <div className={message?"alertMessage_container":""}><p>{message}</p></div>
         </div>
       </div>
     </div>

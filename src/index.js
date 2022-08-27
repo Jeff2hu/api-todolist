@@ -4,14 +4,17 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { HashRouter } from "react-router-dom";
 import { TodoListProvider } from './components/store/todolist/TodoListContext';
+import { LoginProvider } from './components/store/login/LoginContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <HashRouter>
-      <TodoListProvider>
-        <App />
-      </TodoListProvider>
+      <LoginProvider>
+        <TodoListProvider>
+          <App />
+        </TodoListProvider>
+      </LoginProvider>
     </HashRouter>
   </React.StrictMode>
 );

@@ -1,34 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { api_register } from '../store/api/API';
+
+import { api_register } from '../store/login/API_Login';
+import { LoginContext } from '../store/login/LoginContext';
 
 const SignUp = () => {
 
-  const [ message,setMessage ] = useState("")
+  const { message,setMessage } = useContext(LoginContext)
 
   const navigate = useNavigate();
   const { register, handleSubmit, watch, formState:{ errors } } = useForm();
-  const onSubmit = ({email,password,nickName}) => {
-    api_register("users",{
-      "email":email,
-      "nickName":nickName,
-      "password":password
-    })
-    .then(res=>{
-      if(res.status===201){
-        setTimeout(()=>{
-          navigate("/")
-        },1500)
-      }
-      return res.json()
-    })
-    .then(res=>{
+  const onSubmit = async(data) => {
+    const register = await api_register(data)
+    const res = await register.json();
+    if(register.status===201){
       setMessage(res.message)
-    })
-    .catch(error=>{
-      setMessage(error.error)
-    })
+      setTimeout(()=>{
+        navigate("/")
+      },2200)
+    }else{
+      setMessage(res.error)
+    }
   }
 
   useEffect(()=>{
@@ -52,7 +45,7 @@ const SignUp = () => {
               <p className='noValue'>{errors.email && errors.email?.message}</p>
               </label>
               <input 
-                className="formControls_input"
+                className={`formControls_input ${errors.email?"falseInput":""}`}
                 type="text"
                 id="email"
                 placeholder="請輸入信箱"
@@ -68,14 +61,14 @@ const SignUp = () => {
                 })}
               />
               <label className="formControls_label" htmlFor='nickName'>Nick Name
-              <p className='noValue'>{errors.nickName && errors.nickName?.message}</p>
+              <p className='noValue'>{errors.nickname && errors.nickname?.message}</p>
               </label>
               <input 
-                className="formControls_input"
+                className={`formControls_input ${errors.nickname?"falseInput":""}`}
                 type="text"
                 id="nickName"
                 placeholder="請輸入暱稱"
-                {...register("nickName",{ 
+                {...register("nickname",{ 
                   required: {
                     value : true, 
                     message: "此欄位不可留空"
@@ -86,7 +79,7 @@ const SignUp = () => {
               <p className='noValue'>{errors.password && errors.password?.message}</p>
               </label>
               <input 
-                className="formControls_input"
+                className={`formControls_input ${errors.password?"falseInput":""}`}
                 type="password"
                 id="password"
                 placeholder="請輸入密碼"
@@ -105,7 +98,7 @@ const SignUp = () => {
               <p className='noValue'>{errors.checkPassword?.message}</p>
               </label>
               <input 
-                className="formControls_input"
+                className={`formControls_input ${errors.checkPassword?"falseInput":""}`}
                 type="password"
                 id="checkPassword"
                 placeholder="請再次輸入密碼"

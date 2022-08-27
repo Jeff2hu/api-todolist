@@ -1,11 +1,20 @@
-import React from 'react';
+import React,{ useContext } from 'react';
 
 import Navigation from './pages-items/Navigation';
 import TodoAddInput from './pages-items/TodoAddInput';
 import TodoList_Item from './pages-items/TodoList_Item';
 import TodoTabs from './pages-items/TodoTabs';
+import { LoginContext } from '../store/login/LoginContext';
+import { TodoListContext } from '../store/todolist/TodoListContext';
 
 const TodoList = () => {
+
+  const { message,setMessage,data } = useContext(LoginContext)
+
+  setTimeout(()=>{
+    setMessage("")
+  },2000)
+
   return (
     <div id="todoListPage" className="bg-half">
       <Navigation />
@@ -17,15 +26,20 @@ const TodoList = () => {
                 <div className="todoList_items">
                   <TodoList_Item />
                     <div className="todoList_statistics">
-                        <p>0個已完成項目</p>
-                        <button>
+                      <p>{data.todos?.filter((item)=>!item.completed_at).length}個待完成項目</p>
+                      <button
+                        onClick={()=>{
+                          
+                        }}
+                      >
                         清除已完成項目
-                        </button>
+                      </button>
                     </div>
                 </div>
                 </div>
             </div>
         </div>
+        <div className={message?"alertMessage_container":""}><p>{message}</p></div>
     </div>
   )
 }

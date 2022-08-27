@@ -1,11 +1,16 @@
-import { createContext, useState } from "react";
+import { createContext,useContext,useEffect,useState } from "react";
+import { LoginContext } from "../login/LoginContext";
 
 export const TodoListContext = createContext({
-
+  tabs:[],
+  clickTab:"",
+  setClickTab:"",
+  filterData:[]
 });
 
 export const TodoListProvider = ({children}) => {
-  
+
+  const { data } = useContext(LoginContext);
   const [ tabs,setTabs ] = useState([
     {
       title:"全部",
@@ -21,8 +26,23 @@ export const TodoListProvider = ({children}) => {
     }
   ])
   const [ clickTab,setClickTab ] = useState("all");
+  const [ filterData,setFilterData ] = useState([]);
 
-  const value = { tabs,clickTab,setClickTab }
+  useEffect(()=>{
+    switch(clickTab){
+      case"all":
+        setFilterData(data.todos)
+        break;
+      case"working":
+        setFilterData(data.todos.filter((item)=>!item.completed_at))
+        break;
+      case"done":
+        setFilterData(data.todos.filter((item)=>item.completed_at))
+        break;
+      }
+  },[data,clickTab])
+
+  const value = { tabs,clickTab,setClickTab,filterData }
   
   return(
     <TodoListContext.Provider value={value}>
