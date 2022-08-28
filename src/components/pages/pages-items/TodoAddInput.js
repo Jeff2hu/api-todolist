@@ -6,7 +6,6 @@ import { api_todoList } from '../../store/todolist/API_TodoList';
 const TodoAddInput = () => {
 
   const [ userInput,setUserInput ] = useState("")
-  const { getList } = useContext(LoginContext)
 
   const addTodoHandler = (e) => {
     setUserInput(e.target.value)
@@ -14,7 +13,6 @@ const TodoAddInput = () => {
 
   const addHandler = async() => {
     await api_addTodo(localStorage.getItem("token"),userInput)
-    await getList()
     setUserInput("")
   }
 

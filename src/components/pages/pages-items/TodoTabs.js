@@ -13,7 +13,7 @@ const TodoTabs = () => {
           <li 
             key={id}
             className={clickTab===id?"active":""}
-            onClick={(e)=>{
+            onClick={()=>{
               setClickTab(id)
             }}>{title}</li>
         )

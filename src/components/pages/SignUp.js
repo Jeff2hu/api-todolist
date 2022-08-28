@@ -7,7 +7,7 @@ import { LoginContext } from '../store/login/LoginContext';
 
 const SignUp = () => {
 
-  const { message,setMessage } = useContext(LoginContext)
+  const { message,setMessage,errorMessage,setErrorMessage } = useContext(LoginContext)
 
   const navigate = useNavigate();
   const { register, handleSubmit, watch, formState:{ errors } } = useForm();
@@ -20,15 +20,16 @@ const SignUp = () => {
         navigate("/")
       },2200)
     }else{
-      setMessage(res.error)
+      setErrorMessage(res.error)
     }
   }
 
   useEffect(()=>{
     setTimeout(()=>{
       setMessage("")
+      setErrorMessage("")
     },2000)
-  },[message])
+  },[message,errorMessage])
 
   return (
     <div id="signUpPage" className="bg-yellow">
@@ -120,7 +121,8 @@ const SignUp = () => {
               />
               <Link className="formControls_btnLink" to="/">登入</Link>
           </form>
-          <div className={message?"alertMessage_container":""}><p>{message}</p></div>
+          <div className={errorMessage?"alertMessage_container":""}><p><span className='errorMessage'>X</span>{errorMessage}</p></div>
+          <div className={message?"alertMessage_container":""}><p><span className='correctMessage'>✓</span>{message}</p></div>
         </div>
     </div>
   )

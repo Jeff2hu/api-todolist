@@ -5,16 +5,13 @@ import { TodoListContext } from '../../store/todolist/TodoListContext'
 
 const TodoList_Item = () => {
 
-  const { getList } = useContext(LoginContext)
   const { filterData } = useContext(TodoListContext)
 
   const checkboxHandler = async(id) => {
     await api_changeCheckbox(localStorage.getItem("token"),id)
-    getList()
   }
   const deleteHandler = async(id) => {
     await api_deleteItem(localStorage.getItem("token"),id)
-    getList()
   }
 
   return (
@@ -47,7 +44,7 @@ const TodoList_Item = () => {
         </li>
         )
       })
-      :<p className='noTodoList'>~ 目前尚無待辦事項 ~</p>
+      :<p className='noTodoList'>~ 此狀態目前尚無事項 ~</p>
     }
     </ul>
   )

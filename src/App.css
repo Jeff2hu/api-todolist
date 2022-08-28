@@ -548,15 +548,68 @@ nav ul a span {
   left: 0;
   z-index: 1000;
   animation: opacity 2.2s alternate;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+.errorMessage{
+  opacity: 0;
+}
+
+.correctMessage{
+  opacity: 0;
+}
+
+.alertMessage_container .errorMessage{
+  color:red;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: 600;
+  padding:3px 15px 0 10px;
+  position: relative;
+  animation: opacity 2.2s alternate;
+  opacity: 1;
+}
+
+.alertMessage_container .correctMessage{
+  color:rgb(37, 176, 37);
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: 600;
+  padding:3px 20px 0 10px;
+  position: relative;
+  animation: opacity 2.2s alternate;
+  opacity: 1;
+}
+
+.alertMessage_container .errorMessage::before{
+  position: absolute;
+  content:"";
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  top: 4px;
+  left: 2.5px;
+  outline: 3px solid red;
+}
+
+.alertMessage_container .correctMessage::before{
+  position: absolute;
+  content:"";
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  top: 4px;
+  left: 2.5px;
+  outline: 3px solid rgb(37, 176, 37);
 }
 
 .alertMessage_container p{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
   padding: 20px;
   border-radius: 30px;
+  position: absolute;
   background-color: #fff;
   text-align: center;
   font-style: italic;
@@ -575,7 +628,9 @@ nav ul a span {
 
 .noTodoList{
   color:red;
-  opacity: .7;
+  opacity: .6;
+  font-size: 20px;
+  font-weight: 600;
   text-align: center;
   padding: 30px;
   animation: jumping 2s infinite alternate;

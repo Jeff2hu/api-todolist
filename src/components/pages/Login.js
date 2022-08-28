@@ -7,7 +7,7 @@ import { LoginContext } from '../store/login/LoginContext';
 
 const Login = () => {
 
-  const { setToken,message,setMessage } = useContext(LoginContext)
+  const { setToken,message,setMessage,errorMessage,setErrorMessage } = useContext(LoginContext)
   
   const navigate = useNavigate();
   const { register, handleSubmit, formState:{ errors } } = useForm();
@@ -21,15 +21,16 @@ const Login = () => {
       setToken(localStorage.getItem("token"))
       navigate("/todolist")
     }else{
-      setMessage(res.error)
+      setErrorMessage(res.error)
     }
   }
 
   useEffect(()=>{
     setTimeout(()=>{
       setMessage("")
+      setErrorMessage("")
     },2000)
-  },[message])
+  },[message,errorMessage])
 
   return (
     <div id="loginPage" className="bg-yellow">
@@ -86,7 +87,8 @@ const Login = () => {
               />
               <Link className="formControls_btnLink" to="/signup">註冊帳號</Link>
           </form>
-          <div className={message?"alertMessage_container":""}><p>{message}</p></div>
+          <div className={errorMessage?"alertMessage_container":""}><p><span className='errorMessage'>X</span>{errorMessage}</p></div>
+          <div className={message?"alertMessage_container":""}><p><span className='correctMessage'>✓</span>{message}</p></div>
         </div>
       </div>
     </div>

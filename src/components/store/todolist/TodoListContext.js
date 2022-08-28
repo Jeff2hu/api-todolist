@@ -26,10 +26,11 @@ export const TodoListProvider = ({children}) => {
     }
   ])
   const [ clickTab,setClickTab ] = useState("all");
-  const [ filterData,setFilterData ] = useState([]);
+  const [ filterData,setFilterData ] = useState(data.todos);
 
   useEffect(()=>{
-    switch(clickTab){
+    if(data.todos?.length>0){
+      switch(clickTab){
       case"all":
         setFilterData(data.todos)
         break;
@@ -38,9 +39,12 @@ export const TodoListProvider = ({children}) => {
         break;
       case"done":
         setFilterData(data.todos.filter((item)=>item.completed_at))
-        break;
+      break;
       }
-  },[data,clickTab])
+    }else{
+      setFilterData([])
+    }
+  },[data,clickTab,data])
 
   const value = { tabs,clickTab,setClickTab,filterData }
   
